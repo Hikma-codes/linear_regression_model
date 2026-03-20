@@ -23,4 +23,4 @@ linear_regression_model/
 
  
 
-│   ├── FlutterApp/ Leave empty for now 
+│   ├── FlutterApp/ empty  
