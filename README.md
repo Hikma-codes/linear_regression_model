@@ -17,7 +17,7 @@ linear_regression_model/
 
 │   ├── linear_regression/
 
-│   │   ├── Summative_Part_One_HIKMA_HAMZA.ipynb
+│   │   ├── multivariate.ipynb
 
 │   ├── API/ empty 
 
