@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-// ── API configuration ────────────────────────────────────────────────────────
+//  API configuration 
 const String kApiBaseUrl = 'https://linear-regression-model-ovfh.onrender.com';
 
-// ── Field descriptor ─────────────────────────────────────────────────────────
+// Field descriptor 
 class FieldConfig {
   final String key;
   final String label;
@@ -105,7 +105,7 @@ const List<FieldConfig> kFields = [
       max: 5),
 ];
 
-// ── Entry point ───────────────────────────────────────────────────────────────
+// Entry point 
 void main() {
   runApp(const DigitalLiteracyApp());
 }
@@ -138,7 +138,7 @@ class DigitalLiteracyApp extends StatelessWidget {
   }
 }
 
-// ── Single prediction page ────────────────────────────────────────────────────
+//Single prediction page 
 class PredictionPage extends StatefulWidget {
   const PredictionPage({super.key});
 
@@ -179,7 +179,7 @@ class _PredictionPageState extends State<PredictionPage>
     super.dispose();
   }
 
-  // ── API call ─────────────────────────────────────────────────────────────────
+  // API call 
   Future<void> _predict() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -290,7 +290,7 @@ class _PredictionPageState extends State<PredictionPage>
                             'DIGITAL LITERACY',
                             style: GoogleFonts.spaceMono(
                               fontSize: 10,
-                              color: Colors.green,
+                              color: const Color.fromARGB(255, 0, 0, 0),
                               letterSpacing: 3,
                             ),
                           ),
