@@ -20,16 +20,23 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# ── CORS Middleware ──────────────────────────────────────────────────────────
+#  CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # allow all origins (tighten in production)
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:50427",
+        "http://localhost:62944",
+    ],
+
+
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
 )
 
-# ── Input schema (no Skill_Application — that is what we predict) ────────────
+
+# Input schema (no Skill_Application — that is what we predict)
 
 
 class InputData(BaseModel):
@@ -41,7 +48,7 @@ class InputData(BaseModel):
         ..., ge=0, le=100)
     Post_Training_Internet_Usage_Score: float = Field(..., ge=0, le=100)
     Post_Training_Mobile_Literacy_Score: float = Field(..., ge=0, le=100)
-    Modules_Completed: int = Field(..., ge=0, le=100)
+    Modules_Completed: int = Field(..., ge=0, le=10)
     Average_Time_Per_Module: float = Field(..., ge=0, le=100)
     Quiz_Performance: float = Field(..., ge=0, le=100)
     Session_Count: int = Field(..., ge=0, le=500)
@@ -49,7 +56,7 @@ class InputData(BaseModel):
     Feedback_Rating: float = Field(..., ge=0, le=5)
 
 
-# ── Feature order must match what the scaler was trained on ─────────────────
+#  Feature order must match what the scaler was trained on
 FEATURE_COLS = [
     "Age",
     "Basic_Computer_Knowledge_Score",
@@ -68,7 +75,7 @@ FEATURE_COLS = [
 TARGET_COL = "Skill_Application"
 
 
-# ── /predict ─────────────────────────────────────────────────────────────────
+# /predict
 @app.post("/predict", summary="Predict Skill Application score")
 def predict(data: InputData):
     """
@@ -85,7 +92,7 @@ def predict(data: InputData):
     }
 
 
-# ── /retrain ──────────────────────────────────────────────────────────────────
+#  /retrain
 @app.post("/retrain", summary="Retrain model with a new CSV dataset")
 async def retrain(file: UploadFile = File(..., description="CSV file containing training data")):
     """
@@ -94,14 +101,14 @@ async def retrain(file: UploadFile = File(..., description="CSV file containing 
     """
     global model, scaler
 
-    # ── read the uploaded bytes into a DataFrame ──────────────────────────────
+    # read the uploaded bytes into a DataFrame
     try:
         contents = await file.read()
         df_new = pd.read_csv(io.BytesIO(contents))
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Could not read CSV: {e}")
 
-    # ── validate columns ──────────────────────────────────────────────────────
+    #  validate columns
     required_cols = FEATURE_COLS + [TARGET_COL]
     missing_cols = [col for col in required_cols if col not in df_new.columns]
     if missing_cols:
@@ -110,7 +117,7 @@ async def retrain(file: UploadFile = File(..., description="CSV file containing 
             detail=f"Missing columns in uploaded file: {missing_cols}"
         )
 
-    # ── prepare X and y ───────────────────────────────────────────────────────
+    #  prepare X and y
     X = df_new[FEATURE_COLS].apply(pd.to_numeric, errors="coerce").fillna(0)
     y = pd.to_numeric(df_new[TARGET_COL], errors="coerce").fillna(0)
 
@@ -120,14 +127,14 @@ async def retrain(file: UploadFile = File(..., description="CSV file containing 
             detail="Dataset too small — need at least 5 rows to retrain."
         )
 
-    # ── retrain ───────────────────────────────────────────────────────────────
+    #  retrain
     new_scaler = StandardScaler()
     X_scaled = new_scaler.fit_transform(X)
 
     new_model = LinearRegression()
     new_model.fit(X_scaled, y)
 
-    # ── swap globals and persist ──────────────────────────────────────────────
+    #  swap globals and persist
     model = new_model
     scaler = new_scaler
 
