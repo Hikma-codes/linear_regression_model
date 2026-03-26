@@ -1,20 +1,44 @@
-# Linear-Regression Summative
+ **Linear Regression Summative**
+ Mission
 
-**Mission:** Educate and empower the youth in underserved communities to recoginze the tranformatve power of tecnology.
+Educate and empower youth in underserved communities to recognize the transformative power of technology.
 
-**Problem:** Predict the impact of digital literacy training on learners’ income after training.  
+ Problem
 
-**Dataset:** Digital Literacy Education Dataset from Kaggle -link - [https://www.kaggle.com/datasets/ziya07/digital-literacy-education-dataset?resource=download]
+Predict the impact of digital literacy training on learners’ income after training.
 
-**The goal** is to build linear regression, decision tree, and random forest models to predict income outcomes.
+ Dataset
 
-Live API
-Base URL: [https://linear-regression-model-ovfh.onrender.com]
-Swagger UI (interactive docs): [https://linear-regression-model-ovfh.onrender.com/docs]
-Endpoints
-MethodPathDescriptionPOST/predictReturns predicted Skill_Application scorePOST/retrainUpload a CSV to retrain the model
-Example /predict request body
-json{
+Digital Literacy Education Dataset (Kaggle):
+https://www.kaggle.com/datasets/ziya07/digital-literacy-education-dataset?resource=download
+
+ Goal
+
+Build and compare three machine learning models:
+
+Linear Regression
+Decision Tree
+Random Forest
+
+The goal is to predict income outcomes based on digital literacy training data.
+
+ Live API
+Base URL:
+https://linear-regression-model-ovfh.onrender.com
+Swagger UI (Interactive Docs):
+https://linear-regression-model-ovfh.onrender.com/docs
+🔗 API Endpoints
+POST /predict
+
+Returns predicted Skill_Application score
+
+POST /retrain
+
+Uploads a CSV file to retrain the model
+
+ Example Request
+/predict request body:
+{
   "Age": 25,
   "Basic_Computer_Knowledge_Score": 70.0,
   "Internet_Usage_Score": 65.0,
@@ -29,15 +53,15 @@ json{
   "Adaptability_Score": 88.0,
   "Feedback_Rating": 4.2
 }
-
 🎥 Video Demo
-[https://youtu.be/TViAELn27pQ]
 
+https://youtu.be/TViAELn27pQ
 
  Repository Structure
 linear_regression_model/
 │
 ├── summative/
+│   │
 │   ├── linear_regression/
 │   │   └── multivariate.ipynb        # Model training notebook
 │   │
@@ -47,38 +71,76 @@ linear_regression_model/
 │   │   ├── scaler.pkl                # Feature scaler
 │   │   └── requirements.txt
 │   │
-│   └── FlutterApp/
-│       ├── lib/
-│       │   ├── main.dart             # App entry point
-│       │   └── prediction_page.dart  # Prediction UI + API call
-│       └── pubspec.yaml
-
-Running the Flutter App
-Prerequisites
-
+│   ├── FlutterApp/
+│   │   ├── lib/
+│   │   │   ├── main.dart             # App entry point
+│   │   │   └── prediction_page.dart  # Prediction UI + API calls
+│   │   └── pubspec.yaml
+│
+└── StudentPerformanceFactors.csv     # Dataset used for training
+ Running the Flutter App
+ Prerequisites
 Flutter SDK ≥ 3.0.0
-An Android emulator, iOS simulator, or physical device connected
-
-Steps
-bash# 1. Navigate to the Flutter app folder
+Android emulator / iOS simulator / physical device
+ Steps
+# Navigate to Flutter app
 cd summative/FlutterApp
 
-# 2. Install dependencies
+# Install dependencies
 flutter pub get
 
-# 3. Run on a connected device or emulator
+# Run the app
 flutter run
 
-The app targets the live Render API by default [https://linear-regression-model-ovfh.onrender.com]
-No additional configuration is needed.
+ The app connects to the live Render API by default:
+https://linear-regression-model-ovfh.onrender.com
 
-Building a release APK (Android)
-bashflutter build apk --release
-# Output: build/app/outputs/flutter-apk/app-release.apk
+ Build APK (Android)
+flutter build apk --release
 
-Running the API Locally
-bashcd summative/API
+Output:
+
+build/app/outputs/flutter-apk/app-release.apk
+ Running the API Locally
+cd summative/API
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Run server
 uvicorn prediction:app --reload
-# Visit: http://127.0.0.1:8000/docs
-|   |   |-- StudentPerformanceFactors.csv
+
+Then open:
+http://127.0.0.1:8000/docs
+
+ How It Works
+User enters data in the Flutter app
+App sends request to FastAPI backend
+Model processes the input
+Prediction is generated
+Result is returned and displayed
+ Model Approach
+Linear Regression → Simple baseline
+Decision Tree → Captures patterns but may overfit
+Random Forest → Best overall performance
+
+Final model was selected based on lowest loss and better generalization.
+
+ Challenges
+API connection issues between Flutter and backend
+CORS configuration
+Model retraining errors
+Managing deployment on Render
+ Future Improvements
+Improve UI/UX design
+Add user progress tracking
+Deploy mobile app publicly
+Train with larger dataset for better accuracy
+Author
+
+Hikma Hamza
+🔗 www.linkedin.com/in/hikmahamza
+
+ Final Note
+
+This project shows how machine learning can be applied in a real-world context to support digital literacy and economic empowerment.
