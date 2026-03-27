@@ -182,11 +182,10 @@ Result is returned and displayed in the app
 - [ ] Improve mobile UI/UX design
 - [ ] Add user progress tracking across sessions
 - [ ] Deploy the mobile app publicly (Play Store / App Store)
-- [ ] Train with a larger dataset for improved prediction accuracy
 
 ---
 
-## 👤 Author
+##  Author
 
 **Hikma Hamza**
 🔗 [LinkedIn](https://www.linkedin.com/in/hikmahamza)
