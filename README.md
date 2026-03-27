@@ -99,7 +99,7 @@ linear_regression_model/
     │   │   └── prediction_page.dart        # Prediction UI + API integration
     │   └── pubspec.yaml
     │
-    └── StudentPerformanceFactors.csv       # Dataset used for training
+    └── digital_literacy_dataset.csv       # Dataset used for training
 ```
 
 ---
