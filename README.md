@@ -27,9 +27,9 @@ Digital literacy training has the potential to improve economic outcomes for lea
 
 | Model | Description |
 |---|---|
-| **Linear Regression** | Simple baseline model |
+| **Linear Regression** | Best overall performance and generalization |
 | **Decision Tree** | Captures non-linear patterns; may overfit |
-| **Random Forest** | Best overall performance and generalization |
+| **Random Forest** |  Simple baseline model |
 
 The final model was selected based on **lowest loss** and **best generalization** on unseen data.
 
