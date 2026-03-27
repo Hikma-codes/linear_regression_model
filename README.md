@@ -188,7 +188,6 @@ Result is returned and displayed in the app
 ##  Author
 
 **Hikma Hamza**
-🔗 [LinkedIn](https://www.linkedin.com/in/hikmahamza)
 
 ---
 
