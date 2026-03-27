@@ -101,4 +101,49 @@ async def retrain(file: UploadFile = File(..., description="CSV file containing 
     """
     global model, scaler
 
-   
+    # read the uploaded bytes into a DataFrame
+    try:
+        contents = await file.read()
+        df_new = pd.read_csv(io.BytesIO(contents))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not read CSV: {e}")
+
+    #  validate columns
+    required_cols = FEATURE_COLS + [TARGET_COL]
+    missing_cols = [col for col in required_cols if col not in df_new.columns]
+    if missing_cols:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Missing columns in uploaded file: {missing_cols}"
+        )
+
+    #  prepare X and y
+    X = df_new[FEATURE_COLS].apply(pd.to_numeric, errors="coerce").fillna(0)
+    y = pd.to_numeric(df_new[TARGET_COL], errors="coerce").fillna(0)
+
+    if len(X) < 5:
+        raise HTTPException(
+            status_code=400,
+            detail="Dataset too small — need at least 5 rows to retrain."
+        )
+
+    #  retrain
+    new_scaler = StandardScaler()
+    X_scaled = new_scaler.fit_transform(X)
+
+    new_model = LinearRegression()
+    new_model.fit(X_scaled, y)
+
+    #  swap globals and persist
+    model = new_model
+    scaler = new_scaler
+
+    joblib.dump(model, "best_model.pkl")
+    joblib.dump(scaler, "scaler.pkl")
+
+    return {
+        "message": "Model retrained successfully",
+        "rows_used": len(X),
+        "features": FEATURE_COLS,
+        "target": TARGET_COL,
+    }
