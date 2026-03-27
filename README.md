@@ -1,6 +1,6 @@
 # Linear Regression Summative
 
-> **Predicting the impact of digital literacy training on learner outcomes using machine learning.**
+ **Predicting the impact of digital literacy training on learner outcomes using machine learning.**
 
 ---
 
